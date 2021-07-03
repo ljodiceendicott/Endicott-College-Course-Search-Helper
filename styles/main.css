@@ -1,0 +1,34 @@
+*{
+    margin: 0 auto;
+}
+body{
+    text-align:center
+}
+header{
+    
+    background-image: radial-gradient(ellipse at left, #013968, #00325b 75%);
+    text-align:left;
+    float:left;
+}
+.Dropboxmenus{
+    text-align:center;
+}
+#filter{
+    background-image: radial-gradient(ellipse at left, #013968, #00325b 75%);
+    padding-bottom: 1em;
+    margin-bottom:10px;
+    color:white;
+}
+select{
+    margin:10px 0
+}
+#filterbutton{
+    width:25%
+}
+body{
+    background-color: #015f45;
+    color: white;
+}
+div#courseinfo{
+    margin-top: 3%;
+}

@@ -1,0 +1,233 @@
+<html>
+    <head>
+        
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link rel="stylesheet" href="styles/main.css">
+    </head>
+   
+    <body>
+        <header>
+            Endicott College Course Reqirement Help Page
+        </header>
+       <div id=filter>
+        <div id="Dropboxmenus">
+            <br>
+            Gen Ed Requirement:
+        <select name="myDropdownList" id="GenEdReq"> 
+            <option value="All">All</option>
+            <option value="None">None</option> 
+            <option value="Aesthetic Awareness">Aesthetic Awareness</option> 
+            <option value="Global Issues">Global Issues</option> 
+            <option value="Individual and Society">Individual and Society</option> 
+            <option value="Literary Perspectives">Literary Perspectives</option> 
+            <option value="Quantitive Reasoning">Quantitive Reasoning</option> 
+            <option value="Science and Technology">Science and Technology</option> 
+            <option value="Values and Ethical Reasoning">Values and Ethical Reasoning</option> 
+            <option value="World Cultures">World Cultures</option>
+        </select> 
+        <br>Semsester:
+        <select id="dropdownSem" name="dropdownSem" onchange="SemesterChange()">
+            <option value="All">All</option>
+            <option value="SP21">SP21</option>
+            <option value="FA21">FA21</option>
+            
+               </select>
+        </div>
+        <input type="checkbox" id = "ISWRITING" name = "iswriting" value="writing">
+        <label for="ISWRITING">Is a Writing Requirement</label>
+
+        <input type="checkbox" id = "ISDEI" name = "isdei" value="dei">
+        <label for="ISDEI">Is a Diversity,Equality, Inclusive Requirement</label>
+       
+        <input type="checkbox" id = "ISPERFORM" name = "isPERFORM" value="perform">
+        <label for="ISPERFORM">Is a Performance Requirement</label>
+        
+        <input type="checkbox" id = "ISLANG" name = "islang" value="language">
+        <label for="ISLANG">Is a Language Requirement</label><br>
+        <button id="filterbutton" onclick="filterChange()">Apply Changes</button>
+    <br>
+    If there are any issues, Refresh the page    
+    </div>
+        <div id="courseinfo" style="height: 41em; overflow: auto;">
+         
+            <div id="myData"></div>
+            <table id="myTable">
+                <tbody id="myTable">
+
+                </tbody>
+            </table>
+        <script>
+            function SemesterChange(){
+                //get what the newest one that is selected
+                var x = document.getElementById("dropdownSem").value
+                console.log(x);
+                //put the data that corresponds to the selected value
+
+            }
+            function getdata(docname){
+                if(docname == "All"){
+                    //put all of the avaliable courses in the list
+                }
+                else if(docname == "SP21"){
+
+                }
+                else if(docname == "FA21"){
+
+                }
+            }
+            function makeTable(Array){
+                if(Array.isEmpty){
+                    alert("Im sorry current filter has no results maybe try a more basic request")
+                    return;
+                }
+                clearTable()
+                var table = document.getElementById('myTable')
+                for(var i=0; i<Array.length; i++){
+                    var row = `
+                            <tr>
+                                <td> ${Array[i].title}</td>
+                            <tr>
+                              `
+                            table.innerHTML +=row
+                            }
+
+            }
+            function clearTable(){
+                var table= document.getElementById('mytable')
+                for(var i =0; i<document.getElementById("myTable").rows.length; i++){
+                    document.getElementById("myTable").deleteRow(i)
+                }
+            }
+            function filterChange(){
+                var dropdown = document.getElementById("GenEdReq")
+                var result = dropdown.options[dropdown.selectedIndex].value
+               // if(result == prev){
+            //        return;
+           //     }
+             //  prev = result;
+                var filteredContent= [];
+                for(var i = 0; i<window.value.length; i++){
+                    //console.log(window.value[i])
+                    if(window.value[i].coursecode==result){
+                        filteredContent.push(window.value[i])
+                    }
+                }
+                if(result =="All"){
+                    filteredContent = window.value
+                }
+                if(ISWRITING.checked){
+                    var tempfilt = [];
+                    for(var i =0; i<filteredContent.length; i++){
+                        if(filteredContent[i].isWriting){
+                            tempfilt.push(filteredContent[i]);
+                            console.log("Logged:"+filteredContent[i]);
+                        }
+                    }
+                filteredContent = tempfilt;
+                }
+                if(ISDEI.checked){
+                    var tempfilt2 = [];
+                   console.log("DEI Check")
+                    for(var j = 0; j<filteredContent.length; j++){
+                       if(filteredContent[j].isDEI){
+                            tempfilt2.push(filteredContent[j])
+                        }
+                    }
+                    filteredContent = tempfilt2
+                    console.log(filteredContent)
+                }
+                if(ISPERFORM.checked){
+                    var tempfilt3 = [];
+                    console.log("Perform Check")
+                    for(var k=0; k<filteredContent.length; k++){
+                        if(filteredContent[k].isPerformance){
+                            tempfilt3.push(filteredContent[k])
+                        }
+                    }
+                    filteredContent = tempfilt3
+                    console.log(filteredContent)
+                }
+                if(ISLANG.checked){
+                    var tempfilt4 = [];
+                    console.log("Language Check")
+                    for(var m = 0; m<filteredContent.length; m++){
+                        if(filteredContent[m].isLanguage){
+                            tempfilt4.push(filteredContent[m])
+                        }
+                    }
+                    filteredContent = tempfilt4
+                    console.log(filteredContent)
+                }
+                
+                
+                makeTable(filteredContent);
+            }
+            fetch("data.json")
+            //fetch("json_of_cat.json")
+                .then(response => response.json())
+                .then(data =>{
+                    console.log(data)
+                    var classes = data.sessions[0].classes;
+                    console.log(classes)
+                    var mainContain = document.getElementById("myData");
+                    var classarray = [];
+                    
+                    for(var i=0; i<data.sessions[0].classes.length; i++){
+                    var classSes= data.sessions[0].classes[i]
+                    //from course dump
+                   // var coursecode = classSes.course
+                   // var coursename = classSes.title1
+                   //const classobj = {title:coursename, coursecode:coursecode};
+                   //from GenEd file
+                    var coursename = classSes.name
+                    var genedReq =  classSes.genEdReq
+                    var iswrite = classSes.isWriting
+                    var isdei = classSes.isDEI
+                    var isperform = classSes.isPerformance
+                    var islang = classSes.isLanguage 
+                    const classobj ={title:coursename, coursecode:genedReq,isWriting: iswrite, isDEI: isdei, isPerformance:isperform, isLanguage:islang}
+                    classarray.push(classobj);
+                    console.log(coursename)
+                    }
+                    window.value =classarray
+                    makeTable(classarray);
+
+                    const saveData = (classarray) =>{
+                        const jsonData = JSON.stringify(classarray)
+                        console.log(jsonData)
+                    }
+
+                })
+            
+            /*
+            fetch("json_of_cat.json")
+                .then(function (response){
+                    return response.json();
+                })
+                .then(function (data){
+                    appendData(data);
+                })
+                .catch(function(err){
+                    console.log('error:'+ err);
+                });
+                function appendData(data){
+                    var mainContain = document.getElementById("myData");
+                    for(var i =0; i<data.length; i++){
+
+                    }
+                }*/
+               /* .then(response => response.json())
+                .then(data => {
+                    console.log(data.sessions[0].classes);
+                    var mainContain = document.getElementById("myData");
+                })
+                    for(var i=0; i<data.sessions[0].classes.length; i++){
+                    var div= document.createElement("div");
+                    var course = data.sessions[0].classes[i];
+                    mainContain.appendChild(div);
+                    }
+                */
+        </script>
+    </body>
+</html>
